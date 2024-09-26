@@ -1,0 +1,10 @@
+services:
+  user:
+    repo_type: postgres  # in-memory postgres
+    repository:
+      settings:
+        user: postgres
+        password: postgres
+        name: postgres
+        port: 5432
+        host: 127.0.0.1

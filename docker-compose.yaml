@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  postgres_db:
+    restart: always
+    image: postgres:13
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    network_mode: host
+    expose:
+      - 5432
+#    ports:
+#      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      retries: 5
+  
+  app:
+    restart: always
+    build: .
+    network_mode: host
+    expose:
+      - 8000
+#    ports:
+#      - 8000:8000
+    depends_on:
+      - postgres_db
+    entrypoint: /bin/bash /code/src/entrypoints/fastapi/entrypoint.sh
+
+volumes:
+  postgres-db-volume:
+    driver: local
